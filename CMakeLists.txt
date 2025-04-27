@@ -15,7 +15,16 @@ FetchContent_MakeAvailable(SFML)
 add_executable(TetrisCPP
         src/main.cpp
         src/BoardView.cpp
-        src/BoardView.h)
+        src/BoardView.h
+        src/Observable.cpp
+        src/Observable.h
+        src/Observer.cpp
+        src/Observer.h
+        src/TileRectangle.cpp
+        src/TileRectangle.h
+        src/TileSquare.cpp
+        src/TileSquare.h)
 
+target_include_directories(TetrisCPP PRIVATE src/)
 target_compile_features(TetrisCPP    PRIVATE cxx_std_17)
 target_link_libraries(TetrisCPP PRIVATE SFML::Graphics)
