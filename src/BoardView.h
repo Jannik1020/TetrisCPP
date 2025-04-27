@@ -11,26 +11,30 @@
 
 
 class BoardView final : public sf::Drawable, public sf::Transformable, public Observable {
-    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-
     sf::VertexArray vertices;
     float width{};
     float height{};
     float borderWidth{};
 
+    static const int numberColumns{12};
+    static const int numberRows{18};
+
+    void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+
+    void initVertexArray();
+
 public:
-    BoardView(float width, float height);
- float getWidth() const;
+    explicit BoardView(float width);
 
-    void setWidth(float width);
 
+    float getWidth() const;
     float getHeight() const;
 
-    void setHeight(float height);
-
     float getBorderWidth() const;
-
     void setBorderWidth(float border_width);
+
+    float getTileWidth() const {return width / numberColumns;}
+    float getTileHeight() const {return getTileWidth();}
 };
 
 
