@@ -24,6 +24,8 @@ add_executable(TetrisCPP
         src/TileGrid.h
         src/Tetromino.cpp
         src/Tetromino.h
+        src/BoardModel.cpp
+        src/BoardModel.h
 )
 
 target_include_directories(TetrisCPP PRIVATE src/)
