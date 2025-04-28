@@ -9,8 +9,13 @@
 #include "SFML/Graphics/Color.hpp"
 
 
-struct Tile {
-    sf::Color color = sf::Color::White;
+class Tile {
+    sf::Color color;
+public:
+    Tile():color(sf::Color::White){}
+    explicit Tile(sf::Color color): color(color){}
+
+    sf::Color getColor() {return color;}
 };
 
 class TileGridCell {
@@ -40,6 +45,12 @@ public:
     Grid(int rows, int columns): grid(rows, std::vector<T>(columns, T())),
                                      columns(columns),
                                      rows(rows) {
+    }
+
+    Grid(std::initializer_list<std::initializer_list<T>> init): columns(init[0].size()), rows(init.size()) {
+        for (const auto& row : init) {
+            grid.emplace_back(row);
+        }
     }
 
     std::vector<T> &operator[](int idx) { return grid[idx]; }
