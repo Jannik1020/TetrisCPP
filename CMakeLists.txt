@@ -20,6 +20,10 @@ add_executable(TetrisCPP
         src/Observable.h
         src/Observer.cpp
         src/Observer.h
+        src/TileGrid.cpp
+        src/TileGrid.h
+        src/Tetromino.cpp
+        src/Tetromino.h
 )
 
 target_include_directories(TetrisCPP PRIVATE src/)
