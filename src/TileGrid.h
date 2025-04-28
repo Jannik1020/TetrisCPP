@@ -57,6 +57,7 @@ public:
     const std::vector<T> &operator[](int idx) const { return grid[idx]; }
 
     T & getCellAt (int row, int col) {return grid[row][col];}
+    const T & getCellAt (int row, int col) const {return grid[row][col];}
 };
 
 using TileGrid = Grid<TileGridCell>;
