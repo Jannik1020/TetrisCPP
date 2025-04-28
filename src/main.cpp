@@ -7,7 +7,7 @@
 int main() {
     sf::RenderWindow window(sf::VideoMode({2000, 2000}), "SFML works!");
 
-    BoardView board(800, 1200);
+    BoardView board(800, 12, 20);
 
     while (window.isOpen()) {
         while (const std::optional event = window.pollEvent()) {

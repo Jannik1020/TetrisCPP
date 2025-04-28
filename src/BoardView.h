@@ -16,15 +16,14 @@ class BoardView final : public sf::Drawable, public sf::Transformable, public Ob
     float height{};
     float borderWidth{};
 
-    static const int numberColumns{12};
-    static const int numberRows{18};
+    float tileWidth;
 
     void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     void initVertexArray();
 
 public:
-    explicit BoardView(float width);
+    explicit BoardView(float width, float numberColumns, float numberRows);
 
 
     float getWidth() const;
@@ -33,7 +32,7 @@ public:
     float getBorderWidth() const;
     void setBorderWidth(float border_width);
 
-    float getTileWidth() const {return width / numberColumns;}
+    float getTileWidth() const {return tileWidth;}
     float getTileHeight() const {return getTileWidth();}
 };
 

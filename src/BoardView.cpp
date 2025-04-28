@@ -28,9 +28,9 @@ void BoardView::initVertexArray() {
     vertices[7].position = sf::Vector2f(width - 2 * borderWidth, 0.f); //right border: top left
 }
 
-BoardView::BoardView(float width): vertices(sf::VertexArray(
+BoardView::BoardView(float width, float numberColumns, float numberRows): vertices(sf::VertexArray(
                                        sf::PrimitiveType::TriangleStrip, 8)),
-                                   width(width), height((width / numberColumns) * numberRows), borderWidth(10) {
+                                   width(width), height((width / numberColumns) * numberRows), borderWidth(10), tileWidth(width / numberColumns) {
     initVertexArray();
 }
 
