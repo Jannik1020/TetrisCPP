@@ -72,6 +72,8 @@ class Tetromino {
 
 public:
     Tetromino(TetrominoShape::TetrominoShapeGrid& shape, sf::Color color);
+    int getBoundingSize() const{return grid.columns;}
+    TileGrid const & getTileGrid(){return grid;}
 };
 
 
