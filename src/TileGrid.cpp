@@ -12,9 +12,11 @@ void TileGridCell::attachTile(Tile *tile) {
 }
 
 void TileGridCell::detachTile() {
-    delete this->tile;
-    this->tile = nullptr;
-    isOccupied = false;
+    if (this->tile != nullptr) {
+        delete this->tile;
+        this->tile = nullptr;
+        isOccupied = false;
+    }
 }
 
 void TileGridCell::transferTile(TileGridCell & cell) {

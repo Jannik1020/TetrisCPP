@@ -4,14 +4,21 @@
 
 #ifndef BOARDVIEW_H
 #define BOARDVIEW_H
+#include "BoardModel.h"
 #include "Observable.h"
+#include "TileGrid.h"
 #include "SFML/Graphics/Drawable.hpp"
 #include "SFML/Graphics/Transformable.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
 
 
 class BoardView final : public sf::Drawable, public sf::Transformable, public Observable {
+    const TileGrid &board;
+    const Tetromino *const&activeTetromino;
+    const Position &activeTetrominoPosition;
+
     sf::VertexArray vertices;
+
     float width{};
     float height{};
     float borderWidth{};
@@ -23,17 +30,20 @@ class BoardView final : public sf::Drawable, public sf::Transformable, public Ob
     void initVertexArray();
 
 public:
-    explicit BoardView(float width, float numberColumns, float numberRows);
+    explicit BoardView(float width, const TileGrid &board, const Tetromino *const&activeTetromino,
+                       const Position &activeTetrominoPosition);
 
 
     float getWidth() const;
+
     float getHeight() const;
 
     float getBorderWidth() const;
+
     void setBorderWidth(float border_width);
 
-    float getTileWidth() const {return tileWidth;}
-    float getTileHeight() const {return getTileWidth();}
+    float getTileWidth() const { return tileWidth; }
+    float getTileHeight() const { return getTileWidth(); }
 };
 
 

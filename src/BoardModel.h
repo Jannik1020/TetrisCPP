@@ -26,14 +26,14 @@ public:
 class MoveRightStrategy : public MoveStrategy {
 public:
     Position move(Position position) override {
-        position.x -= 1;
+        position.x += 1;
         return position;
     }
 };
 
 class MoveLeftStrategy : public MoveStrategy {
     Position move(Position position) override {
-        position.x += 1;
+        position.x -= 1;
         return position;
     }
 };
@@ -72,10 +72,13 @@ class BoardModel {
 
     bool checkBottomCollision();
 
-    void spawnNewTetromino();
+    void resetBoard();
+
+    bool isRowComplete(std::vector<TileGridCell> &row) const;
 
 public:
     BoardModel(): grid(numberRows, numberColumns), activeTetromino(nullptr), activeTetrominoPosition(0, 0), activeMoveStrategy(moveDownStrategy) {
+        resetBoard();
     }
 
     void moveActiveTetrominoRight();
@@ -85,6 +88,18 @@ public:
     void moveActiveTetrominoDown();
 
     void rotateActiveTetromino();
+
+    void spawnNewTetromino();
+
+    const TileGrid & getTileGrid() {return grid;}
+    const Tetromino* const& getActiveTetromino() const {
+        return activeTetromino;
+    }
+    const Position & getActiveTetrominoPosition() const {
+        return activeTetrominoPosition;
+    }
+
+    void deleteCompleteRows();
 };
 
 

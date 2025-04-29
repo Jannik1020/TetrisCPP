@@ -15,7 +15,7 @@ public:
     Tile():color(sf::Color::White){}
     explicit Tile(sf::Color color): color(color){}
 
-    sf::Color getColor() {return color;}
+    sf::Color getColor() const {return color;}
 };
 
 class TileGridCell {
@@ -47,11 +47,15 @@ public:
                                      rows(rows) {
     }
 
-    Grid(std::initializer_list<std::initializer_list<T>> init): columns(init[0].size()), rows(init.size()) {
+    Grid(std::initializer_list<std::initializer_list<T>> init): columns(init.size()), rows(init.begin()->size()) {
         for (const auto& row : init) {
             grid.emplace_back(row);
         }
     }
+
+    void popRow(int row){grid.erase(grid.begin()+row);}
+    void pushRow(std::vector<T> row) {grid.insert(grid.begin(), row);}
+    void pushEmptyRow() {pushRow(std::vector<T>(columns, T()));}
 
     std::vector<T> &operator[](int idx) { return grid[idx]; }
     const std::vector<T> &operator[](int idx) const { return grid[idx]; }
