@@ -24,3 +24,5 @@ Links Model and View. Manipulates / Accesses data of Model and provides it to th
   - view stores collection of observers and calls the implemented methods of view listener according to the triggered events
   - controller implements view listener interface and is responsible for handling those events by pulling data from model, updating view, etc.
 - controller registers view and model
+
+https://harddrop.com/wiki/SRS
