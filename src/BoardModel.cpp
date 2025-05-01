@@ -9,7 +9,9 @@
 #include <iostream>
 #include <random>
 
+class TetrisScore {
 
+};
 
 bool BoardModel::checkTetrominoCollision() const{
     ActiveTetromino previewTetromino = activeMoveStrategy->move(activeTetromino);
@@ -52,6 +54,8 @@ void BoardModel::settleTetromino() {
             tetrominoGrid.getCellAt(row, col).transferTile(grid.getCellAt(y + row, x + col));
         }
     }
+
+    tetrominoQueue.pop();
 }
 
 
@@ -104,9 +108,8 @@ void BoardModel::rotateActiveTetromino() {
     moveActiveTetromino(rotateStrategy);
 }
 
-void BoardModel::spawnNewTetromino() {
-    std::random_device::result_type random =std::random_device()() % 7;
-    activeTetromino = ActiveTetromino(Tetromino(TetrominoShape::Shapes[random],TetrominoShape::ShapeColors[random]));
+void BoardModel::spawnNextTetromino() {
+    activeTetromino = tetrominoQueue.front();
     activeTetromino.x = numberColumns / 2 - activeTetromino.tetromino.getBoundingSize() / 2;
     activeTetromino.y = 0 - activeTetromino.tetromino.getFirstOccupiedGridRow();
 
@@ -126,7 +129,8 @@ bool BoardModel::checkBottomCollision() {
 
 void BoardModel::resetBoard() {
     activeMoveStrategy = moveDownStrategy;
-    spawnNewTetromino();
+    fillTetrominoQueue();
+    spawnNextTetromino();
 }
 
 bool BoardModel::isRowComplete(std::vector<TileGridCell>& row) const{
@@ -142,5 +146,12 @@ void BoardModel::deleteCompleteRows() {
             grid.popRow(i);
             grid.pushEmptyRow();
         }
+    }
+}
+
+void BoardModel::fillTetrominoQueue() {
+    while (tetrominoQueue.size() < tetrominoQueueLength) {
+        std::random_device::result_type random =std::random_device()() % 7;
+        tetrominoQueue.emplace(Tetromino(TetrominoShape::Shapes[random],TetrominoShape::ShapeColors[random]));
     }
 }

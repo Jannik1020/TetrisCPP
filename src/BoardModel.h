@@ -4,6 +4,8 @@
 
 #ifndef BOARDMODEL_H
 #define BOARDMODEL_H
+#include <queue>
+
 #include "Tetromino.h"
 #include "TileGrid.h"
 
@@ -22,7 +24,7 @@ struct ActiveTetromino {
     int y = 0;
 
     ActiveTetromino():tetromino(Tetromino()){}
-    ActiveTetromino(const Tetromino &tetromino): tetromino(tetromino){}
+    explicit ActiveTetromino(const Tetromino &tetromino): tetromino(tetromino){}
     ActiveTetromino(ActiveTetromino const& other):tetromino(other.tetromino), x(other.x), y(other.y) {
     }
     ActiveTetromino &operator=(const ActiveTetromino & tetromino) {
@@ -78,43 +80,15 @@ public:
     }
 };
 
-class MoveStrategy {
-public:
-    virtual ~MoveStrategy() = default;
-
-    virtual Position move(Position position) =0;
-};
-
-class MoveRightStrategy : public MoveStrategy {
-public:
-    Position move(Position position) override {
-        position.x += 1;
-        return position;
-    }
-};
-
-class MoveLeftStrategy : public MoveStrategy {
-    Position move(Position position) override {
-        position.x -= 1;
-        return position;
-    }
-};
-
-class MoveDownStrategy : public MoveStrategy {
-    Position move(Position position) override {
-        position.y += 1;
-        return position;
-    }
-};
-
-
 class BoardModel {
     static constexpr int numberColumns{12};
     static constexpr int numberRows{20};
+    static constexpr int tetrominoQueueLength{3};
 
     TileGrid grid;
 
     ActiveTetromino activeTetromino;
+    std::queue<ActiveTetromino> tetrominoQueue;
 
     TetrominoMoveRightStrategy* const moveRightStrategy = new TetrominoMoveRightStrategy();
     TetrominoMoveLeftStrategy* const moveLeftStrategy = new TetrominoMoveLeftStrategy();
@@ -138,6 +112,7 @@ class BoardModel {
 
     bool isRowComplete(std::vector<TileGridCell> &row) const;
 
+    void fillTetrominoQueue() ;
 public:
     BoardModel(): grid(numberRows, numberColumns), activeMoveStrategy(moveDownStrategy) {
         resetBoard();
@@ -151,7 +126,7 @@ public:
 
     void rotateActiveTetromino();
 
-    void spawnNewTetromino();
+    void spawnNextTetromino();
 
     const TileGrid & getTileGrid() {return grid;}
     const ActiveTetromino & getActiveTetromino() const {
