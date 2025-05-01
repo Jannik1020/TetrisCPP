@@ -21,8 +21,20 @@ struct ActiveTetromino {
     int x = 0;
     int y = 0;
 
+    ActiveTetromino():tetromino(Tetromino()){}
     ActiveTetromino(const Tetromino &tetromino): tetromino(tetromino){}
-    ActiveTetromino(ActiveTetromino const& other):tetromino(other.tetromino) {
+    ActiveTetromino(ActiveTetromino const& other):tetromino(other.tetromino), x(other.x), y(other.y) {
+    }
+    ActiveTetromino &operator=(const ActiveTetromino & tetromino) {
+        if (this == &tetromino) {
+            return *this;
+        }
+
+        this->tetromino = Tetromino(tetromino.tetromino);
+        x = tetromino.x;
+        y = tetromino.y;
+
+        return *this;
     }
 };
 
@@ -102,17 +114,17 @@ class BoardModel {
 
     TileGrid grid;
 
-    Tetromino *activeTetromino;
-    Position activeTetrominoPosition;
+    ActiveTetromino activeTetromino;
+
+    TetrominoMoveRightStrategy* const moveRightStrategy = new TetrominoMoveRightStrategy();
+    TetrominoMoveLeftStrategy* const moveLeftStrategy = new TetrominoMoveLeftStrategy();
+    TetrominoMoveDownStrategy* const moveDownStrategy = new TetrominoMoveDownStrategy();
+    TetrominoRotateStrategy* const rotateStrategy = new TetrominoRotateStrategy();
 
 
-    MoveRightStrategy* const moveRightStrategy = new MoveRightStrategy();
-    MoveLeftStrategy* const moveLeftStrategy = new MoveLeftStrategy();
-    MoveDownStrategy* const moveDownStrategy= new MoveDownStrategy();
+    TetrominoMoveStrategy* activeMoveStrategy;
 
-    MoveStrategy* activeMoveStrategy;
-
-    void moveActiveTetromino(MoveStrategy* );
+    void moveActiveTetromino(TetrominoMoveStrategy* );
 
     void settleTetromino();
 
@@ -127,7 +139,7 @@ class BoardModel {
     bool isRowComplete(std::vector<TileGridCell> &row) const;
 
 public:
-    BoardModel(): grid(numberRows, numberColumns), activeTetromino(nullptr), activeTetrominoPosition(0, 0), activeMoveStrategy(moveDownStrategy) {
+    BoardModel(): grid(numberRows, numberColumns), activeMoveStrategy(moveDownStrategy) {
         resetBoard();
     }
 
@@ -142,11 +154,8 @@ public:
     void spawnNewTetromino();
 
     const TileGrid & getTileGrid() {return grid;}
-    const Tetromino* const& getActiveTetromino() const {
+    const ActiveTetromino & getActiveTetromino() const {
         return activeTetromino;
-    }
-    const Position & getActiveTetrominoPosition() const {
-        return activeTetrominoPosition;
     }
 
     void deleteCompleteRows();

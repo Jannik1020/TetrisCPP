@@ -41,8 +41,8 @@ template<typename T> class Grid {
     friend std::ostream &operator<<(std::ostream &os, const Grid<TileGridCell> &grid);
 
 public:
-    const int columns;
-    const int rows;
+    int columns;
+    int rows;
 
     Grid(int rows, int columns): grid(rows, std::vector<T>(columns, T())),
                                      columns(columns),
@@ -66,6 +66,18 @@ public:
 
     T & getCellAt (int row, int col) {return grid[row][col];}
     const T & getCellAt (int row, int col) const {return grid[row][col];}
+
+    Grid &operator=(const Grid & other) {
+        if (this == &other) {
+            return *this;
+        }
+
+        this->grid = other.grid;
+        columns = other.columns;
+        rows = other.rows;
+
+        return *this;
+    }
 };
 
 using TileGrid = Grid<TileGridCell>;

@@ -13,23 +13,13 @@ int main() {
     sf::RenderWindow window(sf::VideoMode({2000, 2000}), "SFML works!");
 
     BoardModel board;
-    BoardView boardView(800, board.getTileGrid(), board.getActiveTetromino(), board.getActiveTetrominoPosition());
+    BoardView boardView(800, board.getTileGrid(), board.getActiveTetromino());
     BoardController controller(board);
-
-    Tetromino tet1 = Tetromino(TetrominoShape::L_SHAPE, sf::Color::Green);
-    ActiveTetromino aTet = ActiveTetromino(tet1);
-    ActiveTetromino tet2 = TetrominoRotateStrategy().move(aTet);
-
-
-    std::cout << aTet.tetromino.getTileGrid();
-    std::cout << tet2.tetromino.getTileGrid();
-
-    return 0;
 
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Time elapsed = clock.restart();
-        while (elapsed.asMilliseconds() < 1500) {
+        while (elapsed.asMilliseconds() < 1000) {
             while (const std::optional event = window.pollEvent()) {
                 if (event->is<sf::Event::Closed>())
                     window.close();

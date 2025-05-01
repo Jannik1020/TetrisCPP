@@ -37,15 +37,13 @@ void BoardView::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         }
     }
 
-    if (activeTetromino == nullptr) return;
-
-    const TileGrid & activeTetrominoGrid = activeTetromino->getTileGrid();
+    const TileGrid & activeTetrominoGrid = activeTetromino.tetromino.getTileGrid();
 
     for (int row = 0; row < activeTetrominoGrid.rows; row++) {
         for (int col = 0; col < activeTetrominoGrid.columns; col++) {
             if ( activeTetrominoGrid.getCellAt(row, col).isCellOccupied()) {
-                float originX = borderWidth + col * tileWidth + activeTetrominoPosition.x * tileWidth;
-                float originY = row * tileWidth + activeTetrominoPosition.y * tileWidth;
+                float originX = borderWidth + col * tileWidth + activeTetromino.x * tileWidth;
+                float originY = row * tileWidth + activeTetromino.y * tileWidth;
 
                 tile[0].position = sf::Vector2f(originX, originY);
                 tile[1].position = sf::Vector2f(originX, originY+tileWidth);
@@ -77,10 +75,9 @@ void BoardView::initVertexArray() {
     vertices[7].position = sf::Vector2f(width - borderWidth, 0.f); //right border: top left
 }
 
-BoardView::BoardView(float width, const TileGrid & board, const Tetromino*const  &activeTetromino, const Position &activeTetrominoPosition):
+BoardView::BoardView(float width, const TileGrid & board, const ActiveTetromino  &activeTetromino):
                                     board(board),
                                     activeTetromino(activeTetromino),
-                                    activeTetrominoPosition(activeTetrominoPosition),
                                     vertices(sf::VertexArray(sf::PrimitiveType::TriangleStrip, 8)),
                                     width(width),
                                     borderWidth(10) {

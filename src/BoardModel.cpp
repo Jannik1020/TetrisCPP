@@ -10,15 +10,15 @@
 #include <random>
 
 bool BoardModel::checkTetrominoCollision() const{
-    Position expectedPosition = activeMoveStrategy->move(activeTetrominoPosition);
+    ActiveTetromino previewTetromino = activeMoveStrategy->move(activeTetromino);
+    //Position expectedPosition = activeMoveStrategy->move(activeTetrominoPosition);
 
-    int x = expectedPosition.x;
-    int y = expectedPosition.y;
-    int boundingSize = activeTetromino->getBoundingSize();
-    TileGrid tetrominoGrid = activeTetromino->getTileGrid();
+    int x = previewTetromino.x;
+    int y = previewTetromino.y;
+    TileGrid tetrominoGrid = previewTetromino.tetromino.getTileGrid();
 
-    for (int row = activeTetromino->getFirstOccupiedGridRow(); row < activeTetromino->getLastOccupiedGridRow()+1; row++) {
-        for (int col = activeTetromino->getFirstOccupiedGridColumn(); col < activeTetromino->getLastOccupiedGridColumn()+1; col++) {
+    for (int row = previewTetromino.tetromino.getFirstOccupiedGridRow(); row < previewTetromino.tetromino.getLastOccupiedGridRow()+1; row++) {
+        for (int col = previewTetromino.tetromino.getFirstOccupiedGridColumn(); col < previewTetromino.tetromino.getLastOccupiedGridColumn()+1; col++) {
             if (y+row >= grid.rows) break;
             if (x+col >= grid.columns) break;
             if (x+col < 0) break;
@@ -33,26 +33,27 @@ bool BoardModel::checkTetrominoCollision() const{
 }
 
 bool BoardModel::checkWallCollision() const {
-    Position expectedPosition = activeMoveStrategy->move(activeTetrominoPosition);
-    if (expectedPosition.x + activeTetromino->getFirstOccupiedGridColumn() < 0 ||
-        expectedPosition.x + activeTetromino->getLastOccupiedGridColumn() >= grid.columns) return true;
+    ActiveTetromino previewTetromino = activeMoveStrategy->move(activeTetromino);
+    //Position expectedPosition = activeMoveStrategy->move(activeTetrominoPosition);
+    if (previewTetromino.x + previewTetromino.tetromino.getFirstOccupiedGridColumn() < 0 ||
+        previewTetromino.x + previewTetromino.tetromino.getLastOccupiedGridColumn() >= grid.columns) return true;
     return false;
 }
 
 void BoardModel::settleTetromino() {
-    int x = activeTetrominoPosition.x;
-    int y = activeTetrominoPosition.y;
-    TileGrid tetrominoGrid = activeTetromino->getTileGrid();
+    int x = activeTetromino.x;
+    int y = activeTetromino.y;
+    TileGrid tetrominoGrid = activeTetromino.tetromino.getTileGrid();
 
-    for (int row = 0; row <= activeTetromino->getLastOccupiedGridRow(); row++) {
-        for (int col = 0; col <= activeTetromino->getLastOccupiedGridColumn(); col++) {
+    for (int row = 0; row <= activeTetromino.tetromino.getLastOccupiedGridRow(); row++) {
+        for (int col = 0; col <= activeTetromino.tetromino.getLastOccupiedGridColumn(); col++) {
             tetrominoGrid.getCellAt(row, col).transferTile(grid.getCellAt(y + row, x + col));
         }
     }
 }
 
 
-void BoardModel::moveActiveTetromino(MoveStrategy * newMoveStrategy) {
+void BoardModel::moveActiveTetromino(TetrominoMoveStrategy * newMoveStrategy) {
     bool noCollision = true;
 
     activeMoveStrategy = newMoveStrategy;
@@ -82,7 +83,7 @@ void BoardModel::moveActiveTetromino(MoveStrategy * newMoveStrategy) {
     }
 
     if (noCollision)
-    activeTetrominoPosition = activeMoveStrategy->move(activeTetrominoPosition);
+    activeTetromino = activeMoveStrategy->move(activeTetromino);
 }
 
 void BoardModel::moveActiveTetrominoRight() {
@@ -98,27 +99,26 @@ void BoardModel::moveActiveTetrominoDown() {
 }
 
 void BoardModel::rotateActiveTetromino() {
-    activeTetromino->rotate90Clockwise();
+    moveActiveTetromino(rotateStrategy);
 }
 
 void BoardModel::spawnNewTetromino() {
-    delete activeTetromino;
     std::random_device::result_type random =std::random_device()() % 7;
-    activeTetromino = new Tetromino(TetrominoShape::Shapes[random],TetrominoShape::ShapeColors[random]);
-    activeTetrominoPosition.x = numberColumns / 2 - activeTetromino->getBoundingSize() / 2;
-    activeTetrominoPosition.y = 0 - activeTetromino->getFirstOccupiedGridRow();
+    activeTetromino = ActiveTetromino(Tetromino(TetrominoShape::Shapes[random],TetrominoShape::ShapeColors[random]));
+    activeTetromino.x = numberColumns / 2 - activeTetromino.tetromino.getBoundingSize() / 2;
+    activeTetromino.y = 0 - activeTetromino.tetromino.getFirstOccupiedGridRow();
 
     if (checkTetrominoCollision()) {
         std::cout << "Game Over" << std::endl;
-        delete activeTetromino;
-        activeTetromino = nullptr;
+        exit(1);
     }
 }
 
 bool BoardModel::checkBottomCollision() {
-    Position expectedPosition = activeMoveStrategy->move(activeTetrominoPosition);
-    int lastOccupiedRow = activeTetromino->getLastOccupiedGridRow();
-    if (expectedPosition.y + lastOccupiedRow >= grid.rows) return true;
+    ActiveTetromino previewTetromino = activeMoveStrategy->move(activeTetromino);
+    //Position expectedPosition = activeMoveStrategy->move(activeTetrominoPosition);
+    int lastOccupiedRow = previewTetromino.tetromino.getLastOccupiedGridRow();
+    if (previewTetromino.y + lastOccupiedRow >= grid.rows) return true;
     return false;
 }
 

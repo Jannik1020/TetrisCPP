@@ -14,8 +14,7 @@
 
 class BoardView final : public sf::Drawable, public sf::Transformable, public Observable {
     const TileGrid &board;
-    const Tetromino *const&activeTetromino;
-    const Position &activeTetrominoPosition;
+    const ActiveTetromino &activeTetromino;
 
     sf::VertexArray vertices;
 
@@ -30,8 +29,7 @@ class BoardView final : public sf::Drawable, public sf::Transformable, public Ob
     void initVertexArray();
 
 public:
-    explicit BoardView(float width, const TileGrid &board, const Tetromino *const&activeTetromino,
-                       const Position &activeTetrominoPosition);
+    explicit BoardView(float width, const TileGrid &board, const ActiveTetromino&activeTetromino);
 
 
     float getWidth() const;

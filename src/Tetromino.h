@@ -65,6 +65,7 @@ class Tetromino {
     friend std::ostream &operator<<(std::ostream &os, const Tetromino &tetromino) ;
 
 public:
+    Tetromino():Tetromino(TetrominoShape::L_SHAPE, sf::Color::Green){}
     Tetromino(const TetrominoShape::TetrominoShapeGrid& shape, sf::Color color);
     Tetromino(Tetromino const & otherTetromino);
     int getBoundingSize() const{return grid.columns;}
@@ -74,6 +75,16 @@ public:
     int getLastOccupiedGridColumn();
     void rotate90Clockwise() ;
     TileGrid const & getTileGrid()const {return grid;}
+    Tetromino &operator=(const Tetromino & tetromino) {
+        if (this == &tetromino) {
+            return *this;
+        }
+
+        this->grid = tetromino.grid;
+        color = tetromino.color;
+
+        return *this;
+    }
 };
 
 
