@@ -10,10 +10,10 @@
 
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode({2000, 2000}), "SFML works!");
+    sf::RenderWindow window(sf::VideoMode({2000, 2000}), "Tetris");
 
     BoardModel board;
-    BoardView boardView(800, board.getTileGrid(), board.getActiveTetromino());
+    BoardView boardView(1400, board.getTileGrid(), board.getActiveTetromino());
     BoardController controller(board);
 
     sf::Clock clock;
@@ -29,6 +29,7 @@ int main() {
                     window.setView(sf::View(visibleArea));
                     boardView.setPosition(sf::Vector2f(window.getSize().x / 2 - boardView.getWidth() / 2,
                                                        window.getSize().y / 2 - boardView.getHeight() / 2));
+                    boardView.setHeight(window.getSize().y * (0.8));
                 }
                 sf::Clock timer;
                 if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Left)) {

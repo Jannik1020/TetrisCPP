@@ -9,6 +9,8 @@
 #include <iostream>
 #include <random>
 
+
+
 bool BoardModel::checkTetrominoCollision() const{
     ActiveTetromino previewTetromino = activeMoveStrategy->move(activeTetromino);
     //Position expectedPosition = activeMoveStrategy->move(activeTetrominoPosition);

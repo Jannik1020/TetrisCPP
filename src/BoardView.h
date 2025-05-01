@@ -31,7 +31,8 @@ class BoardView final : public sf::Drawable, public sf::Transformable, public Ob
 public:
     explicit BoardView(float width, const TileGrid &board, const ActiveTetromino&activeTetromino);
 
-
+    void setWidth(float width);
+    void setHeight(float height);
     float getWidth() const;
 
     float getHeight() const;

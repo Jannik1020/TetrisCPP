@@ -103,3 +103,29 @@ float BoardView::getBorderWidth() const {
 void BoardView::setBorderWidth(float border_width) {
     borderWidth = border_width;
 }
+
+void BoardView::setWidth(float width) {
+    if (width > 500) {
+        this->width = width;
+    }
+    else {
+        this->width = 500;
+    }
+
+    tileWidth = (width-2*borderWidth) / static_cast<float>(board.columns);
+    height = tileWidth * static_cast<float>(board.rows) + borderWidth;
+    initVertexArray();
+}
+
+void BoardView::setHeight(float height) {
+    if (height > 500) {
+        this->height = height;
+    }
+    else {
+        this->height = 500;
+    }
+
+    tileWidth = (this->height-borderWidth) / static_cast<float>(board.rows);
+    width = tileWidth * static_cast<float>(board.columns) + 2*borderWidth;
+    initVertexArray();
+}
