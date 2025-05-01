@@ -13,7 +13,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode({2000, 2000}), "Tetris");
 
     BoardModel board;
-    BoardView boardView(1400, board.getTileGrid(), board.getActiveTetromino());
+    BoardView boardView(1400, board.getTileGrid(), board.getActiveTetromino(), board.getTetrominoQueue());
     BoardController controller(board);
 
     sf::Clock clock;

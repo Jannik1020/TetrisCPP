@@ -133,6 +133,10 @@ public:
         return activeTetromino;
     }
 
+    const std::queue<ActiveTetromino> & getTetrominoQueue() const {
+        return tetrominoQueue;
+    }
+
     void deleteCompleteRows();
 };
 

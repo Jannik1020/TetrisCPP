@@ -15,6 +15,7 @@
 class BoardView final : public sf::Drawable, public sf::Transformable, public Observable {
     const TileGrid &board;
     const ActiveTetromino &activeTetromino;
+    const std::queue<ActiveTetromino> &tetrominoQueue;
 
     sf::VertexArray vertices;
 
@@ -29,7 +30,7 @@ class BoardView final : public sf::Drawable, public sf::Transformable, public Ob
     void initVertexArray();
 
 public:
-    explicit BoardView(float width, const TileGrid &board, const ActiveTetromino&activeTetromino);
+    explicit BoardView(float width, const TileGrid &board, const ActiveTetromino&activeTetromino, const std::queue<ActiveTetromino>& tetrominoQueue);
 
     void setWidth(float width);
     void setHeight(float height);

@@ -28,6 +28,8 @@ add_executable(TetrisCPP
         src/BoardModel.h
         src/BoardController.cpp
         src/BoardController.h
+        src/TetrominoQueueView.cpp
+        src/TetrominoQueueView.h
 )
 
 target_include_directories(TetrisCPP PRIVATE src/)
