@@ -16,12 +16,21 @@ int main() {
     BoardView boardView(800, board.getTileGrid(), board.getActiveTetromino(), board.getActiveTetrominoPosition());
     BoardController controller(board);
 
+    Tetromino tet1 = Tetromino(TetrominoShape::L_SHAPE, sf::Color::Green);
+    ActiveTetromino aTet = ActiveTetromino(tet1);
+    ActiveTetromino tet2 = TetrominoRotateStrategy().move(aTet);
+
+
+    std::cout << aTet.tetromino.getTileGrid();
+    std::cout << tet2.tetromino.getTileGrid();
+
+    return 0;
 
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Time elapsed = clock.restart();
         while (elapsed.asMilliseconds() < 1500) {
-                                                                                    while (const std::optional event = window.pollEvent()) {
+            while (const std::optional event = window.pollEvent()) {
                 if (event->is<sf::Event::Closed>())
                     window.close();
                 if (const auto *resized = event->getIf<sf::Event::Resized>()) {
@@ -55,7 +64,6 @@ int main() {
                     controller.rotateTetromino();
                     std::cout << "Rotate " << timer.getElapsedTime().asMicroseconds() << std::endl;
                 }
-
             }
 
             controller.deleteCompleteRows();

@@ -17,9 +17,53 @@ struct Position {
 };
 
 struct ActiveTetromino {
-    Tetromino * tetromino = nullptr;
+    Tetromino tetromino;
     int x = 0;
     int y = 0;
+
+    ActiveTetromino(const Tetromino &tetromino): tetromino(tetromino){}
+    ActiveTetromino(ActiveTetromino const& other):tetromino(other.tetromino) {
+    }
+};
+
+class TetrominoMoveStrategy {
+    public:
+    virtual ~TetrominoMoveStrategy() = default;
+
+    virtual ActiveTetromino move(ActiveTetromino activeTetromino) =0;
+};
+
+class TetrominoMoveRightStrategy : public TetrominoMoveStrategy {
+public:
+    ActiveTetromino move(ActiveTetromino activeTetromino) override {
+        activeTetromino.x += 1;
+        return activeTetromino;
+    }
+};
+
+class TetrominoMoveLeftStrategy : public TetrominoMoveStrategy {
+public:
+    ActiveTetromino move(ActiveTetromino activeTetromino) override {
+        activeTetromino.x -= 1;
+        return activeTetromino;
+    }
+};
+
+class TetrominoMoveDownStrategy : public TetrominoMoveStrategy {
+public:
+    ActiveTetromino move(ActiveTetromino activeTetromino) override {
+        activeTetromino.y += 1;
+        return activeTetromino;
+    }
+};
+
+
+class TetrominoRotateStrategy : public TetrominoMoveStrategy {
+public:
+    ActiveTetromino move(ActiveTetromino activeTetromino) override {
+        activeTetromino.tetromino.rotate90Clockwise();
+        return activeTetromino;
+    }
 };
 
 class MoveStrategy {
