@@ -16,6 +16,12 @@ struct Position {
     }
 };
 
+struct ActiveTetromino {
+    Tetromino * tetromino = nullptr;
+    int x = 0;
+    int y = 0;
+};
+
 class MoveStrategy {
 public:
     virtual ~MoveStrategy() = default;
