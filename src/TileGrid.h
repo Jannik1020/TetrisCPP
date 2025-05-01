@@ -4,6 +4,7 @@
 
 #ifndef TILEGRID_H
 #define TILEGRID_H
+#include <iostream>
 #include <vector>
 
 #include "SFML/Graphics/Color.hpp"
@@ -37,6 +38,7 @@ public:
 
 template<typename T> class Grid {
     std::vector<std::vector<T>> grid;
+    friend std::ostream &operator<<(std::ostream &os, const Grid<TileGridCell> &grid);
 
 public:
     const int columns;
@@ -52,6 +54,8 @@ public:
             grid.emplace_back(row);
         }
     }
+
+    Grid(Grid const &otherGrid): grid(otherGrid.grid), columns(otherGrid.columns), rows(otherGrid.rows) {}
 
     void popRow(int row){grid.erase(grid.begin()+row);}
     void pushRow(std::vector<T> row) {grid.insert(grid.begin(), row);}

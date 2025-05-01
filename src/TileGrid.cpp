@@ -24,3 +24,15 @@ void TileGridCell::transferTile(TileGridCell & cell) {
     this->tile=nullptr;
     isOccupied = false;
 }
+
+#include <iostream>
+
+std::ostream &operator<<(std::ostream &os, const Grid<TileGridCell> &grid) {
+    for (int row = 0; row < grid.rows; ++row) {
+        for (int col = 0; col < grid.columns; ++col) {
+            os << (grid.getCellAt(row, col).isCellOccupied() ? "X" : ".") << " ";
+        }
+        os << "\n";
+    }
+    return os;
+}

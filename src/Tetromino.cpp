@@ -78,3 +78,11 @@ void Tetromino::rotate90Clockwise() {
         }
     }
 }
+
+Tetromino::Tetromino(Tetromino const &otherTetromino):grid(otherTetromino.getTileGrid()), color(otherTetromino.color) {
+}
+
+std::ostream &operator<<(std::ostream &os, const Tetromino &tetromino) {
+    os << tetromino.getTileGrid();
+    return os;
+}

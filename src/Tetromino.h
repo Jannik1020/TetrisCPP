@@ -62,9 +62,11 @@ namespace TetrominoShape {
 class Tetromino {
     TileGrid grid;
     sf::Color color;
+    friend std::ostream &operator<<(std::ostream &os, const Tetromino &tetromino) ;
 
 public:
     Tetromino(const TetrominoShape::TetrominoShapeGrid& shape, sf::Color color);
+    Tetromino(Tetromino const & otherTetromino);
     int getBoundingSize() const{return grid.columns;}
     int getFirstOccupiedGridRow();
     int getLastOccupiedGridRow();
