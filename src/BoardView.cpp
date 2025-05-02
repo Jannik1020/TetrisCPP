@@ -6,11 +6,12 @@
 
 #include <sys/stat.h>
 
+#include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/RenderStates.hpp"
 #include "SFML/Graphics/RenderTarget.hpp"
+#include "SFML/Graphics/Text.hpp"
 
 void BoardView::draw(sf::RenderTarget &target, sf::RenderStates states) const {
-
     /*
      * Draw Tetris Board
      */
@@ -92,10 +93,9 @@ void BoardView::draw(sf::RenderTarget &target, sf::RenderStates states) const {
 
         for (int row = 0; row < previewGrid.rows; row++) {
             for (int col = 0; col < previewGrid.columns; col++) {
-
                 if (previewGrid.getCellAt(row, col).isCellOccupied()) {
                     float originX = width + offsetX + (col - firstOccupiedCol) * previewTileWidth;
-                    float originY = offsetY + (row-firstOccupiedRow) * previewTileWidth;
+                    float originY = offsetY + (row - firstOccupiedRow) * previewTileWidth;
 
                     tile[0].position = sf::Vector2f(originX, originY);
                     tile[1].position = sf::Vector2f(originX, originY + previewTileWidth);
@@ -111,8 +111,25 @@ void BoardView::draw(sf::RenderTarget &target, sf::RenderStates states) const {
             }
         }
         copyQueue.pop();
-        offsetY+=(lastOccupiedRow-firstOccupiedRow+1)*previewTileWidth+previewTileWidth;
+        offsetY += (lastOccupiedRow - firstOccupiedRow + 1) * previewTileWidth + previewTileWidth;
     }
+
+    /*
+     * Draw score
+     */
+
+    sf::Font font("../Arial.ttf");
+    sf::Text text(font);
+
+    float textSize = tileWidth;
+
+    text.setString("Lines: " + std::to_string(score.getScore()));
+    text.setCharacterSize(textSize);
+    text.setFillColor(sf::Color::White);
+
+    text.setPosition(sf::Vector2f(width + previewTileWidth, height-textSize));
+
+    target.draw(text, states);
 }
 
 void BoardView::initVertexArray() {
@@ -129,14 +146,14 @@ void BoardView::initVertexArray() {
     vertices[7].position = sf::Vector2f(width - borderWidth, 0.f); //right border: top left
 }
 
-BoardView::BoardView(float width, const TileGrid &board, const ActiveTetromino &activeTetromino,
-                     const std::queue<ActiveTetromino> &tetrominoQueue): board(board),
-                                                                         activeTetromino(activeTetromino),
-                                                                         tetrominoQueue(tetrominoQueue),
-                                                                         vertices(sf::VertexArray(
-                                                                             sf::PrimitiveType::TriangleStrip, 8)),
-                                                                         width(width),
-                                                                         borderWidth(10) {
+BoardView::BoardView(float width, const BoardModel &boardModel): board(boardModel.getTileGrid()),
+                                                                 activeTetromino(boardModel.getActiveTetromino()),
+                                                                 tetrominoQueue(boardModel.getTetrominoQueue()),
+                                                                 score(boardModel.getScore()),
+                                                                 vertices(sf::VertexArray(
+                                                                     sf::PrimitiveType::TriangleStrip, 8)),
+                                                                 width(width),
+                                                                 borderWidth(10) {
     tileWidth = (width - 2 * borderWidth) / static_cast<float>(board.columns);
     height = tileWidth * static_cast<float>(board.rows) + borderWidth;
     initVertexArray();

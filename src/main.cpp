@@ -13,13 +13,15 @@ int main() {
     sf::RenderWindow window(sf::VideoMode({2000, 2000}), "Tetris");
 
     BoardModel board;
-    BoardView boardView(1400, board.getTileGrid(), board.getActiveTetromino(), board.getTetrominoQueue());
+    BoardView boardView(1400, board);
     BoardController controller(board);
+
+    int tickSpeed = 1000;
 
     sf::Clock clock;
     while (window.isOpen()) {
         sf::Time elapsed = clock.restart();
-        while (elapsed.asMilliseconds() < 1000) {
+        while (elapsed.asMilliseconds() < tickSpeed) {
             while (const std::optional event = window.pollEvent()) {
                 if (event->is<sf::Event::Closed>())
                     window.close();
@@ -66,6 +68,7 @@ int main() {
 
         controller.moveTetrominoDown();
         clock.reset();
+        // tickSpeed -= 0.2;
         // window.clear();
         // window.draw(boardView);
         // window.display();

@@ -9,10 +9,6 @@
 #include <iostream>
 #include <random>
 
-class TetrisScore {
-
-};
-
 bool BoardModel::checkTetrominoCollision() const{
     ActiveTetromino previewTetromino = activeMoveStrategy->move(activeTetromino);
     //Position expectedPosition = activeMoveStrategy->move(activeTetrominoPosition);
@@ -140,13 +136,17 @@ bool BoardModel::isRowComplete(std::vector<TileGridCell>& row) const{
     return true;
 
 }
-void BoardModel::deleteCompleteRows() {
+int BoardModel::deleteCompleteRows() {
+    int count = 0;
     for (int i = 0; i < grid.rows; i++) {
         if (isRowComplete(grid[i])) {
             grid.popRow(i);
             grid.pushEmptyRow();
+            count++;
         }
     }
+    score.score(count);
+    return count;
 }
 
 void BoardModel::fillTetrominoQueue() {
@@ -155,3 +155,4 @@ void BoardModel::fillTetrominoQueue() {
         tetrominoQueue.emplace(Tetromino(TetrominoShape::Shapes[random],TetrominoShape::ShapeColors[random]));
     }
 }
+

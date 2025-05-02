@@ -13,21 +13,41 @@ struct Position {
     int x;
     int y;
 
-    Position():x(0),y(0){}
+    Position(): x(0), y(0) {
+    }
+
     Position(int x, int y): x(x), y(y) {
     }
 };
+
+class TetrisScore {
+    int score_;
+    int linesCleared;
+
+public:
+    TetrisScore(): score_(0), linesCleared(0) {
+    }
+
+    void score(int linesCleared) { this->linesCleared += linesCleared; }
+    int getScore() const { return linesCleared; }
+};
+
 
 struct ActiveTetromino {
     Tetromino tetromino;
     int x = 0;
     int y = 0;
 
-    ActiveTetromino():tetromino(Tetromino()){}
-    explicit ActiveTetromino(const Tetromino &tetromino): tetromino(tetromino){}
-    ActiveTetromino(ActiveTetromino const& other):tetromino(other.tetromino), x(other.x), y(other.y) {
+    ActiveTetromino(): tetromino(Tetromino()) {
     }
-    ActiveTetromino &operator=(const ActiveTetromino & tetromino) {
+
+    explicit ActiveTetromino(const Tetromino &tetromino): tetromino(tetromino) {
+    }
+
+    ActiveTetromino(ActiveTetromino const &other): tetromino(other.tetromino), x(other.x), y(other.y) {
+    }
+
+    ActiveTetromino &operator=(const ActiveTetromino &tetromino) {
         if (this == &tetromino) {
             return *this;
         }
@@ -41,7 +61,7 @@ struct ActiveTetromino {
 };
 
 class TetrominoMoveStrategy {
-    public:
+public:
     virtual ~TetrominoMoveStrategy() = default;
 
     virtual ActiveTetromino move(ActiveTetromino activeTetromino) =0;
@@ -86,19 +106,20 @@ class BoardModel {
     static constexpr int tetrominoQueueLength{3};
 
     TileGrid grid;
+    TetrisScore score;
 
     ActiveTetromino activeTetromino;
     std::queue<ActiveTetromino> tetrominoQueue;
 
-    TetrominoMoveRightStrategy* const moveRightStrategy = new TetrominoMoveRightStrategy();
-    TetrominoMoveLeftStrategy* const moveLeftStrategy = new TetrominoMoveLeftStrategy();
-    TetrominoMoveDownStrategy* const moveDownStrategy = new TetrominoMoveDownStrategy();
-    TetrominoRotateStrategy* const rotateStrategy = new TetrominoRotateStrategy();
+    TetrominoMoveRightStrategy *const moveRightStrategy = new TetrominoMoveRightStrategy();
+    TetrominoMoveLeftStrategy *const moveLeftStrategy = new TetrominoMoveLeftStrategy();
+    TetrominoMoveDownStrategy *const moveDownStrategy = new TetrominoMoveDownStrategy();
+    TetrominoRotateStrategy *const rotateStrategy = new TetrominoRotateStrategy();
 
 
-    TetrominoMoveStrategy* activeMoveStrategy;
+    TetrominoMoveStrategy *activeMoveStrategy;
 
-    void moveActiveTetromino(TetrominoMoveStrategy* );
+    void moveActiveTetromino(TetrominoMoveStrategy *);
 
     void settleTetromino();
 
@@ -112,7 +133,8 @@ class BoardModel {
 
     bool isRowComplete(std::vector<TileGridCell> &row) const;
 
-    void fillTetrominoQueue() ;
+    void fillTetrominoQueue();
+
 public:
     BoardModel(): grid(numberRows, numberColumns), activeMoveStrategy(moveDownStrategy) {
         resetBoard();
@@ -128,16 +150,19 @@ public:
 
     void spawnNextTetromino();
 
-    const TileGrid & getTileGrid() {return grid;}
-    const ActiveTetromino & getActiveTetromino() const {
+    const TileGrid &getTileGrid() const { return grid; }
+
+    const ActiveTetromino &getActiveTetromino() const {
         return activeTetromino;
     }
 
-    const std::queue<ActiveTetromino> & getTetrominoQueue() const {
+    const std::queue<ActiveTetromino> &getTetrominoQueue() const {
         return tetrominoQueue;
     }
 
-    void deleteCompleteRows();
+    const TetrisScore& getScore()const {return score;}
+
+    int deleteCompleteRows();
 };
 
 
